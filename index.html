@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskTick</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Righteous&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <button class="back-button" id="backButton" onclick="showLanding()">
+      ← Back
+    </button>
+
+    <div class="landing-page" id="landingPage">
+      <h1>TaskTick</h1>
+      <div class="flip-clock">
+        <div class="flip-unit">
+          <div class="flip-card">
+            <div class="flip-card-inner" id="flipHours">00</div>
+          </div>
+          <span class="flip-label">Hours</span>
+        </div>
+        <span class="colon">:</span>
+        <div class="flip-unit">
+          <div class="flip-card">
+            <div class="flip-card-inner" id="flipMinutes">00</div>
+          </div>
+          <span class="flip-label">Minutes</span>
+        </div>
+        <span class="colon">:</span>
+        <div class="flip-unit">
+          <div class="flip-card">
+            <div class="flip-card-inner" id="flipSeconds">00</div>
+          </div>
+          <span class="flip-label">Seconds</span>
+        </div>
+      </div>
+
+      <div class="options-container">
+        <div class="option-card" onclick="showTimer()">
+          <h2>⏱️ Timer</h2>
+          <p>Set a countdown timer</p>
+        </div>
+        <div class="option-card" onclick="showStopwatch()">
+          <h2>⏲️ Stopwatch</h2>
+          <p>Measure elapsed time</p>
+        </div>
+        <div class="option-card" onclick="showPomodoro()">
+          <h2>🍅 Pomodoro</h2>
+          <p>Focus with work/break cycles</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="timerContainer">
+      <h1>Timer</h1>
+      <div class="input-area">
+        <input id="setHours" type="number" placeholder="Hours" min="0" />
+        <input
+          id="setMinutes"
+          type="number"
+          placeholder="Minutes"
+          min="0"
+          max="59"
+        />
+        <input
+          id="setSeconds"
+          type="number"
+          placeholder="Seconds"
+          min="0"
+          max="59"
+        />
+        <button onclick="startTimer()">Start</button>
+        <button onclick="stopTimer()">Stop</button>
+      </div>
+
+      <div class="digital-timer">
+        <span id="hours">00</span> : <span id="minutes">00</span> :
+        <span id="seconds">00</span>
+      </div>
+
+      <div class="history-container">
+        <h2>History</h2>
+        <div class="history-list" id="historyList">
+          <div class="no-history">No timers completed yet</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="stopwatchContainer">
+      <h1>Stopwatch</h1>
+      <div class="digital-timer">
+        <span id="swHours">00</span> : <span id="swMinutes">00</span> :
+        <span id="swSeconds">00</span>
+      </div>
+      <div class="input-area">
+        <button onclick="startStopwatch()">Start</button>
+        <button onclick="pauseStopwatch()">Pause</button>
+        <button onclick="resetStopwatch()">Reset</button>
+      </div>
+    </div>
+
+    <div class="container" id="pomodoroContainer">
+      <h1>Pomodoro Timer</h1>
+      <div class="pomodoro-status" id="pomodoroStatus">Work Time</div>
+      <div class="digital-timer">
+        <span id="pomMinutes">25</span> : <span id="pomSeconds">00</span>
+      </div>
+      <div class="pomodoro-info">
+        <div class="info-item">
+          <span class="info-label">Session</span>
+          <span><span id="pomSession">1</span>/4</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Completed</span>
+          <span id="pomCompleted">0</span>
+        </div>
+      </div>
+      <div class="input-area">
+        <button onclick="startPomodoro()">Start</button>
+        <button onclick="pausePomodoro()">Pause</button>
+        <button onclick="resetPomodoro()">Reset</button>
+      </div>
+    </div>
+
+    <audio id="alarmSound">
+      <source
+        src="https://audio-previews.elements.envatousercontent.com/files/103682271/preview.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
+
+    <script src="script.js"></script>
+  </body>
+</html>
