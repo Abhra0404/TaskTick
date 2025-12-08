@@ -1,3 +1,29 @@
+// Theme toggle functionality
+function toggleTheme() {
+  const body = document.body;
+  const themeIcon = document.getElementById('themeIcon');
+  
+  body.classList.toggle('light-mode');
+  
+  if (body.classList.contains('light-mode')) {
+    themeIcon.textContent = '🌙';
+    localStorage.setItem('theme', 'light');
+  } else {
+    themeIcon.textContent = '☀️';
+    localStorage.setItem('theme', 'dark');
+  }
+}
+
+// Load saved theme on page load
+window.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme');
+  const themeIcon = document.getElementById('themeIcon');
+  
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+    themeIcon.textContent = '🌙';
+  }
+});
 // Clock functionality
 function updateClock() {
   const now = new Date();
