@@ -24,6 +24,7 @@ window.addEventListener('DOMContentLoaded', () => {
     themeIcon.textContent = '🌙';
   }
 });
+
 // Clock functionality
 function updateClock() {
   const now = new Date();
@@ -329,7 +330,7 @@ function handlePomodoroComplete() {
       document.getElementById("pomStatus").textContent = "Long Break";
       pomSession = 1;
     } else {
-      // Short break 
+      // Short break
       pomTime = SHORT_BREAK;
       document.getElementById("pomStatus").textContent = "Short Break";
       pomSession++;
