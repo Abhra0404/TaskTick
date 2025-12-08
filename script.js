@@ -1,11 +1,16 @@
 // Clock functionality
 function updateClock() {
   const now = new Date();
-  const hours = String(now.getHours()).padStart(2, "0");
+  let hours = now.getHours();
   const minutes = String(now.getMinutes()).padStart(2, "0");
   const seconds = String(now.getSeconds()).padStart(2, "0");
+  
+  // Convert to 12-hour format
+  hours = hours % 12;
+  hours = hours ? hours : 12; // 0 should be 12
+  const displayHours = String(hours).padStart(2, "0");
 
-  document.getElementById("flipHours").textContent = hours;
+  document.getElementById("flipHours").textContent = displayHours;
   document.getElementById("flipMinutes").textContent = minutes;
   document.getElementById("flipSeconds").textContent = seconds;
 }
@@ -50,6 +55,7 @@ let startTime = 0;
 let history = [];
 
 function startTimer() {
+  initAudio(); // Initialize audio on user interaction
   clearInterval(interval);
 
   const hrs = parseInt(document.getElementById("setHours").value) || 0;
@@ -65,6 +71,7 @@ function startTimer() {
     if (totalTime <= 0) {
       clearInterval(interval);
       addToHistory(startTime);
+      playSound();
       return;
     }
 
@@ -166,9 +173,66 @@ function resetStopwatch() {
   document.getElementById("swSeconds").textContent = "00";
 }
 
+// Initialize audio context globally
+let audioContext = null;
+
+function initAudio() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+}
+
 function playSound() {
-  let sound = document.getElementById("alarmSound");
-  sound.play();
+  initAudio();
+  
+  const now = audioContext.currentTime;
+  
+  // Create a pleasant bell-like alarm sound
+  const frequencies = [523.25, 659.25, 783.99]; // C5, E5, G5 chord
+  
+  frequencies.forEach((freq, index) => {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.value = freq;
+    oscillator.type = 'sine';
+    
+    // Smooth envelope for bell sound
+    gainNode.gain.setValueAtTime(0, now);
+    gainNode.gain.linearRampToValueAtTime(0.2, now + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 1.5);
+    
+    oscillator.start(now);
+    oscillator.stop(now + 1.5);
+  });
+  
+  // Add a second chime after 0.3 seconds
+  setTimeout(() => {
+    frequencies.forEach((freq, index) => {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = freq;
+      oscillator.type = 'sine';
+      
+      const delayTime = audioContext.currentTime;
+      gainNode.gain.setValueAtTime(0, delayTime);
+      gainNode.gain.linearRampToValueAtTime(0.15, delayTime + 0.01);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, delayTime + 1.2);
+      
+      oscillator.start(delayTime);
+      oscillator.stop(delayTime + 1.2);
+    });
+  }, 300);
 }
 
 // Pomodoro functionality
@@ -184,6 +248,7 @@ const SHORT_BREAK = 5 * 60; // 5 minutes
 const LONG_BREAK = 15 * 60; // 15 minutes
 
 function startPomodoro() {
+  initAudio(); // Initialize audio on user interaction
   if (pomRunning) return;
   pomRunning = true;
 
