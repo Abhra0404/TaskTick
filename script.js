@@ -1,9 +1,19 @@
+// Load saved theme immediately (before DOM loads)
+(function() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.documentElement.classList.add('light-mode');
+  }
+})();
+
 // Theme toggle functionality
 function toggleTheme() {
   const body = document.body;
+  const html = document.documentElement;
   const themeIcon = document.getElementById('themeIcon');
   
   body.classList.toggle('light-mode');
+  html.classList.toggle('light-mode');
   
   if (body.classList.contains('light-mode')) {
     themeIcon.textContent = '🌙';
@@ -14,14 +24,19 @@ function toggleTheme() {
   }
 }
 
-// Load saved theme on page load
+// Update theme icon on page load
 window.addEventListener('DOMContentLoaded', () => {
   const savedTheme = localStorage.getItem('theme');
   const themeIcon = document.getElementById('themeIcon');
   
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-mode');
-    themeIcon.textContent = '🌙';
+  if (themeIcon) {
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-mode');
+      document.documentElement.classList.add('light-mode');
+      themeIcon.textContent = '🌙';
+    } else {
+      themeIcon.textContent = '☀️';
+    }
   }
 });
 
